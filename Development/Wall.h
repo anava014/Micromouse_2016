@@ -11,6 +11,7 @@ public:
 
 	void markPresent();
 	void markNotPresent();
+	bool returnIsPresent();
 };
 
 #endif

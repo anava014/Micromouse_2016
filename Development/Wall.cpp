@@ -15,3 +15,7 @@ void Wall :: markPresent(){
 void Wall :: markNotPresent(){
 	isPresent = false;
 }
+
+bool Wall :: returnIsPresent(){
+	return isPresent;
+}

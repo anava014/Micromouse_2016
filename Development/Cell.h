@@ -2,6 +2,8 @@
 #define CELL_H
 
 #include "Wall.h"
+#include <iostream>
+using namespace std;
 
 class Cell{
 private:
@@ -10,10 +12,16 @@ private:
 	Wall eastWall;
 	Wall westWall;
 
-	bool hasTraversed = false;
+	bool hasTraversed;
+
+	string cellDrawing;
+
+	void fillTop();
+	void fillLeftRight();
+	void fillBottom();
 
 public:
-	Cell();
+	Cell(bool north, bool south, bool east, bool west);
 	void printCell();
 
 };
