@@ -6,9 +6,12 @@
 using namespace std;
 
 int main(){
-	Cell testCell = Cell(true, true, true, true);
+	//Menu
+	Mouse *mighty = new Mouse();
+	Maze mm(mighty);
 
-	testCell.printCell();
+	mm.printMaze();
+	mm.start();
 	
 	return 0;
 }

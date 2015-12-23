@@ -19,10 +19,16 @@ private:
 	void fillTop();
 	void fillLeftRight();
 	void fillBottom();
+	bool liveMouse;
 
 public:
+	Cell();
 	Cell(bool north, bool south, bool east, bool west);
 	void printCell();
+	bool wallStatus(string direction);
+	void setWall(string direction);
+	void setMouseInCell();
+	void removeMouseInCell();
 
 };
 
