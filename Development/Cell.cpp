@@ -60,6 +60,19 @@ bool Cell :: wallStatus(string direction){
 	return false;
 }
 
+bool Cell :: wallStatus(int facing){
+	if(facing == 0)
+		return northWall.returnIsPresent();
+	else if(facing == 2)
+		return southWall.returnIsPresent();
+	else if(facing == 1)
+		return eastWall.returnIsPresent();
+	else if(facing == 3)
+		return westWall.returnIsPresent();
+	cout << endl << "ERROR: Reached end of wallStatus in Cell.cpp" << endl;
+	return false;
+}
+
 void Cell :: fillTop(){
 	if(northWall.returnIsPresent())
 		cellDrawing += "+---+\n";

@@ -33,6 +33,39 @@ public:
 		return facing;
 	}
 
+	void transitionUTurn(){
+		if(facing == 0)
+			facing = 2;
+		else if(facing == 2)
+			facing = 0;
+		else if(facing == 1)
+			facing = 3;
+		else if(facing == 3)
+			facing = 1;
+	}
+
+	void transitionRightTurn(){
+		facing = returnIncrementedFacing();
+	}
+
+	void transitionLeftTurn(){
+		facing = returnDecrementedFacing();
+	}
+
+	int returnDecrementedFacing(){
+		if(facing == 0)
+			return 3;
+		else
+			return facing - 1;
+	}
+
+	int returnIncrementedFacing(){
+		if(facing == 3)
+			return 0;
+		else
+			return facing + 1;
+	}
+
 	void setFacing(int f){
 		facing = f;
 	}

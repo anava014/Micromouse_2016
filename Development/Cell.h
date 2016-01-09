@@ -26,6 +26,7 @@ public:
 	Cell(bool north, bool south, bool east, bool west);
 	void printCell();
 	bool wallStatus(string direction);
+	bool wallStatus(int facing);
 	void setWall(string direction);
 	void setMouseInCell();
 	void removeMouseInCell();

@@ -10,11 +10,15 @@ char Mouse :: mouseChar(){
 	if(facing == 0)
 		return '^';
 	else if(facing == 1)
-		return '_';
-	else if(facing == 2)
 		return '>';
+	else if(facing == 2)
+		return '_';
 	else if(facing == 3)
 		return '<';
+	else{
+		return 'x';
+		cout << "ERROR in MOUSE::mouseChar" << endl;
+	}
 }
 
 void Mouse :: step(){
@@ -27,10 +31,10 @@ void Mouse :: step(){
 		++xPos;
 	}
 	else if(facing == 1){
-		--xPos;
+		--yPos;
 	}
 	else if(facing == 2){
-		--yPos;
+		--xPos;
 	}
 	else if(facing == 3){
 		++yPos;

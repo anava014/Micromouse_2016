@@ -21,7 +21,7 @@ Mouse.o: Mouse.cpp Mouse.h
 	$(COMPILE) $(FLAGS) -c Mouse.cpp
 	
 clean:
-	rm -rf *~ *.o a.out
+	rm -rf *~ *.o a.out*
 	
 run:
 	clear
