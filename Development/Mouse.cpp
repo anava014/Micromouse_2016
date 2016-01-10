@@ -6,19 +6,17 @@ Mouse :: Mouse(){
 	facing = 0; //North
 }
 
-char Mouse :: mouseChar(){
+string Mouse :: mouseChar(){
 	if(facing == 0)
-		return '^';
+		return "\033[1;32m^\033[0m";
 	else if(facing == 1)
-		return '>';
+		return "\033[1;32m>\033[0m";
 	else if(facing == 2)
-		return '_';
+		return "\033[1;32mV\033[0m";
 	else if(facing == 3)
-		return '<';
-	else{
-		return 'x';
-		cout << "ERROR in MOUSE::mouseChar" << endl;
-	}
+		return "\033[1;32m<\033[0m";
+	else
+		return "x";
 }
 
 void Mouse :: step(){

@@ -3,6 +3,7 @@
 
 #include "Wall.h"
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Cell{
@@ -11,6 +12,11 @@ private:
 	Wall southWall;
 	Wall eastWall;
 	Wall westWall;
+
+	int xCoor;
+	int yCoor;
+
+	int distance;
 
 	bool hasTraversed;
 
@@ -30,7 +36,9 @@ public:
 	void setWall(string direction);
 	void setMouseInCell();
 	void removeMouseInCell();
-
+	void setDistance(int d);
+	string returnDistance();
+	void setCoordinates(int x, int y);
 };
 
 #endif

@@ -18,7 +18,7 @@ private:
 public:
 	Mouse();
 	void step();
-	char mouseChar();
+	string mouseChar();
 	void delayProgram(double secondsToDelay);
 
 	int returnXPos(){
@@ -31,6 +31,19 @@ public:
 
 	int returnFacing(){
 		return facing;
+	}
+
+	int returnReverseFacing(){
+		if(facing == 0)
+			return 2;
+		else if(facing == 2)
+			return 0;
+		else if(facing == 1)
+			return 3;
+		else if(facing == 3)
+			return 1;
+
+		else return -1;
 	}
 
 	void transitionUTurn(){

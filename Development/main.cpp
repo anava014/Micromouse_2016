@@ -9,9 +9,9 @@ int main(){
 	//Menu
 	Mouse *mighty = new Mouse();
 	Maze mm(mighty);
-
-	mm.printMaze();
+	//mm.printMaze();
 	mm.start();
+
 	
 	return 0;
 }

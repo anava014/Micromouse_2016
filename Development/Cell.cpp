@@ -3,6 +3,7 @@
 Cell :: Cell(){
 	cellDrawing = "";
 	hasTraversed = false;
+	distance = -1;
 
 	northWall.markNotPresent(); 
 	southWall.markNotPresent(); 
@@ -91,11 +92,30 @@ void Cell :: fillLeftRight(){
 		cellDrawing += "     \n";
 }
 
+void Cell :: setCoordinates(int x, int y){
+	xCoor = x;
+	yCoor = y;
+}
+
 void Cell :: fillBottom(){
 	if(southWall.returnIsPresent())
 		cellDrawing += "+---+";
 	else
 		cellDrawing += "+   +";
+}
+
+void Cell :: setDistance(int d){
+	distance = d;
+
+}
+
+string Cell :: returnDistance(){
+	if(distance == -1)
+		return "-1";
+	else if(distance >= 0 && distance <=9)
+		return " " + to_string(distance);
+	else
+		return to_string(distance);
 }
 
 void Cell :: printCell(){

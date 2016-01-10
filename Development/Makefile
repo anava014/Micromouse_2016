@@ -1,7 +1,7 @@
 #Variables
 COMPILE = g++
 FLAGS = -g -Wall -ansi -pedantic
-OBJS = Maze.o Cell.o Wall.o Mouse.o
+OBJS = Maze.o Cell.o Wall.o Mouse.o CellStack.o
 # -W -Wall -Werror -ansi -pedantic
 #Targets
 
@@ -19,6 +19,9 @@ Maze.o: Maze.cpp Maze.h
 
 Mouse.o: Mouse.cpp Mouse.h
 	$(COMPILE) $(FLAGS) -c Mouse.cpp
+
+CellStack.o: CellStack.cpp CellStack.h
+	$(COMPILE) $(FLAGS) -c CellStack.cpp
 	
 clean:
 	rm -rf *~ *.o a.out*

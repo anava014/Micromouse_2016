@@ -3,6 +3,7 @@
 
 #include "Cell.h"
 #include "Mouse.h"
+#include "CellStack.h"
 #include <fstream>
 #include <string>
 #include <time.h>
@@ -13,7 +14,8 @@ using namespace std;
 class Maze{
 private:
 	Cell maze[16][16];
-	//Cell *liveMaze[16][16];
+	Cell liveMaze[16][16];
+	CellStack floodStack;
 	void drawMiddleLine();
 	void drawLineEnclosure();
 	void drawMap();
@@ -23,6 +25,9 @@ private:
 
 	void setEastWestWalls(int up, int left);
 	void setNorthSouthWalls(int up, int left);
+
+	void setLiveEastWestWalls(int up, int left);
+	void setLiveNorthSouthWalls(int up, int left);
 
 	bool enclosedIn();
 	bool onlyRightOpen();
@@ -36,8 +41,11 @@ private:
 public:
 	Maze(Mouse *mouse);
 	void printMaze();
+	void printLiveMaze();
 	void start();
 	void analyzePosition();
+	void floodFill();
+	void setNewWall(int wallDirection, int x, int y);
 };
 
 #endif
