@@ -1,5 +1,7 @@
 #include "Maze.h"
 
+//CHECK FOR OUT OF BOUNDS
+
 Maze :: Maze(Mouse *mouse){
 	this->mouse = mouse;
 
@@ -219,7 +221,7 @@ void Maze :: start(){
 		printLiveMaze();
 
 		floodFill();
-		//analyzePosition();
+		analyzePosition();
 		
 		mouse->step();
 		//printMaze();
@@ -232,24 +234,96 @@ void Maze :: setNewWall(int wallDirection, int x, int y){
 	else if(wallDirection == 1)
 		setLiveEastWestWalls(x, y-1);
 	else if(wallDirection == 2)
-		setLiveEastWestWalls(x-1, y);
+		setLiveNorthSouthWalls(x-1, y);
 	else if(wallDirection == 3)
-		setLiveEastWestWalls(x, y);
+		setLiveEastWestWalls(x-1, y-1);
+}
+
+void Maze :: pushSelfAndAdjacentCells(int x, int y){
+	for(int i = y + 1; i >= y - 1; --i){
+		for(int j = x + 1; j >= x - 1; --j){
+			floodStack.push(liveMaze[j][i]);
+		}
+	}
+	
 }
 
 void Maze :: floodFill(){
-	// while(!floodStack.isEmpty()){
-	// 	Cell cellCheck = floodStack.pop();
+	for(int i = 0; i < 4; ++i){
+		//If NEW wall discovered
+		//Pushing Current Cell And Adjacent Cells
+		if(maze[mouse->returnXPos()][mouse->returnYPos()].wallStatus(i) &&
+		 	!liveMaze[mouse->returnXPos()][mouse->returnYPos()].wallStatus(i)){
+			setNewWall(i, mouse->returnXPos(), mouse->returnYPos());
+			pushSelfAndAdjacentCells(mouse->returnXPos(), mouse->returnYPos());
+			// printLiveMaze();
+			// cout << "YES" << i << endl;
+			// while(1) {}
+		}
+	}
+	while(!floodStack.isEmpty()){
+		Cell cellCheck = floodStack.pop();
+		int minDistance = 99;
+		//Grabbing Minimum Distance
 		for(int i = 0; i < 4; ++i){
-			if(maze[mouse->returnXPos()][mouse->returnYPos()].wallStatus(i) &&
-			 	!liveMaze[mouse->returnXPos()][mouse->returnYPos()].wallStatus(i)){
-				setNewWall(i, mouse->returnXPos(), mouse->returnYPos());
-				// printLiveMaze();
-				// cout << "YES" << i << endl;
-				// while(1) {}
+			if(!cellCheck.wallStatus(i)){
+				if(i == 0){
+					int cellDistance = liveMaze[cellCheck.returnXCoor() + 1]
+					[cellCheck.returnYCoor()].returnIntDistance();
+					if(cellDistance < minDistance)
+						minDistance = cellDistance;
+				}
+				else if(i == 1){
+					int cellDistance = liveMaze[cellCheck.returnXCoor()]
+					[cellCheck.returnYCoor() - 1].returnIntDistance();
+					if(cellDistance < minDistance)
+						minDistance = cellDistance;
+				}
+				else if(i == 2){
+					int cellDistance = liveMaze[cellCheck.returnXCoor() - 1]
+					[cellCheck.returnYCoor()].returnIntDistance();
+					if(cellDistance < minDistance)
+						minDistance = cellDistance;
+				}
+				else if(i == 3){
+					int cellDistance = liveMaze[cellCheck.returnXCoor()]
+					[cellCheck.returnYCoor() + 1].returnIntDistance();
+					if(cellDistance < minDistance)
+						minDistance = cellDistance;
+				}
 			}
 		}
-	//}
+		//The distance of currCell should be the minimum open neighbor + 1
+		//If not, set that value and push all open neighbors to stack
+		if(cellCheck.returnIntDistance() != 0 &&
+		 	cellCheck.returnIntDistance() != minDistance + 1){
+			if(minDistance != 99)
+				liveMaze[cellCheck.returnXCoor()][cellCheck.returnYCoor()].
+				setDistance(minDistance + 1);
+
+			//Pushing all open neighbors to stack
+			for(int i = 0; i < 4; ++i){
+				if(!cellCheck.wallStatus(i)){
+					if(i == 0){
+						floodStack.push(liveMaze[cellCheck.returnXCoor() + 1]
+							[cellCheck.returnYCoor()]);
+					}
+					else if(i == 1){
+						floodStack.push(liveMaze[cellCheck.returnXCoor()]
+							[cellCheck.returnYCoor() - 1]);
+					}
+					else if(i == 2){
+						floodStack.push(liveMaze[cellCheck.returnXCoor() - 1]
+							[cellCheck.returnYCoor()]);
+					}
+					else if(i == 3){
+						floodStack.push(liveMaze[cellCheck.returnXCoor()]
+							[cellCheck.returnYCoor() + 1]);
+					}
+				}
+			}
+		}
+	}
 }
 
 bool Maze :: enclosedIn(){
@@ -330,58 +404,111 @@ bool Maze :: leftOpportunity(){
 		return false;
 }
 
-
-
 void Maze :: analyzePosition(){
-	if(enclosedIn())
-		mouse->transitionUTurn();
-	else if(onlyRightOpen())
-		mouse->transitionRightTurn();
-	else if(onlyLeftOpen())
-		mouse->transitionLeftTurn();
-	else if(rightOpportunity() && leftOpportunity()){
-		srand(time(NULL));
-		int decision = rand() % 2;
-		if(decision == 0)
-			mouse->transitionLeftTurn();
-		else if(decision == 1)
-			mouse->transitionRightTurn();
-		else{
-			cout << "ERROR in right & left opp" << endl;
-			while(1) {}
+	int minDistance = 99;
+	int minPosition = -1;
+	//Grabbing Minimum Distance
+	printLiveMaze();
+	for(int i = 0; i < 4; ++i){
+		if(!liveMaze[mouse->returnXPos()]
+				[mouse->returnYPos()].wallStatus(i)){
+			if(i == 0){
+				int cellDistance = liveMaze[mouse->returnXPos() + 1]
+				[mouse->returnYPos()].returnIntDistance();
+
+				if(cellDistance < minDistance){
+					minDistance = cellDistance;
+					minPosition = i;
+				}
+			}
+			else if(i == 1){
+				int cellDistance = liveMaze[mouse->returnXPos()]
+				[mouse->returnYPos() - 1].returnIntDistance();
+				if(cellDistance < minDistance){
+					minDistance = cellDistance;
+					minPosition = i;
+				}
+			}
+			else if(i == 2){
+				int cellDistance = liveMaze[mouse->returnXPos() - 1]
+				[mouse->returnYPos()].returnIntDistance();
+				if(cellDistance < minDistance){
+					minDistance = cellDistance;
+					minPosition = i;
+				}
+			}
+			else if(i == 3){
+				int cellDistance = liveMaze[mouse->returnXPos()]
+				[mouse->returnYPos() + 1].returnIntDistance();
+				if(cellDistance < minDistance){
+					minDistance = cellDistance;
+					minPosition = i;
+				}
+			}
 		}
 	}
-	else if(leftOpportunity() && forwardOpportunity()){
-		srand(time(NULL));
-		int decision = rand() % 2;
-		if(decision == 0)
-			mouse->transitionLeftTurn();
-		else if(decision == 1)
-			;
-		else{
-			cout << "ERROR in right & left opp" << endl;
-			while(1) {}
-		}
+
+	if(minPosition == -1){
+		cout << "DEAD" << endl;
+		while(1) {}
 	}
-	else if(rightOpportunity() && forwardOpportunity()){
-		srand(time(NULL));
-		int decision = rand() % 2;
-		if(decision == 0)
-			mouse->transitionRightTurn();
-		else if(decision == 1)
-			;
-		else{
-			cout << "ERROR in right & left opp" << endl;
-			while(1) {}
-		}
-	}
-	else if(rightOpportunity())
-		mouse->transitionRightTurn();
-	else if(leftOpportunity())
-		mouse->transitionLeftTurn();
-	else if(leftAndRightOpen())
-		mouse->transitionLeftTurn();
+	mouse->setFacing(minPosition);
+
+
 }
+
+
+
+// void Maze :: analyzePosition(){
+// 	if(enclosedIn())
+// 		mouse->transitionUTurn();
+// 	else if(onlyRightOpen())
+// 		mouse->transitionRightTurn();
+// 	else if(onlyLeftOpen())
+// 		mouse->transitionLeftTurn();
+// 	else if(rightOpportunity() && leftOpportunity()){
+// 		srand(time(NULL));
+// 		int decision = rand() % 2;
+// 		if(decision == 0)
+// 			mouse->transitionLeftTurn();
+// 		else if(decision == 1)
+// 			mouse->transitionRightTurn();
+// 		else{
+// 			cout << "ERROR in right & left opp" << endl;
+// 			while(1) {}
+// 		}
+// 	}
+// 	else if(leftOpportunity() && forwardOpportunity()){
+// 		srand(time(NULL));
+// 		int decision = rand() % 2;
+// 		if(decision == 0)
+// 			mouse->transitionLeftTurn();
+// 		else if(decision == 1)
+// 			;
+// 		else{
+// 			cout << "ERROR in right & left opp" << endl;
+// 			while(1) {}
+// 		}
+// 	}
+// 	else if(rightOpportunity() && forwardOpportunity()){
+// 		srand(time(NULL));
+// 		int decision = rand() % 2;
+// 		if(decision == 0)
+// 			mouse->transitionRightTurn();
+// 		else if(decision == 1)
+// 			;
+// 		else{
+// 			cout << "ERROR in right & left opp" << endl;
+// 			while(1) {}
+// 		}
+// 	}
+// 	else if(rightOpportunity())
+// 		mouse->transitionRightTurn();
+// 	else if(leftOpportunity())
+// 		mouse->transitionLeftTurn();
+// 	else if(leftAndRightOpen())
+// 		mouse->transitionLeftTurn();
+// }
 
 
 

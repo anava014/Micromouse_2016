@@ -36,6 +36,8 @@ private:
 	bool rightOpportunity();
 	bool leftOpportunity();
 	bool forwardOpportunity();
+
+	void pushSelfAndAdjacentCells(int x, int y);
 	Mouse *mouse;
 
 public:

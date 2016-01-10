@@ -38,7 +38,11 @@ public:
 	void removeMouseInCell();
 	void setDistance(int d);
 	string returnDistance();
+	int returnIntDistance();
 	void setCoordinates(int x, int y);
+
+	int returnXCoor();
+	int returnYCoor();
 };
 
 #endif

@@ -97,6 +97,14 @@ void Cell :: setCoordinates(int x, int y){
 	yCoor = y;
 }
 
+int Cell :: returnXCoor(){
+	return xCoor;
+}
+
+int Cell :: returnYCoor(){
+	return yCoor;
+}
+
 void Cell :: fillBottom(){
 	if(southWall.returnIsPresent())
 		cellDrawing += "+---+";
@@ -116,6 +124,10 @@ string Cell :: returnDistance(){
 		return " " + to_string(distance);
 	else
 		return to_string(distance);
+}
+
+int Cell :: returnIntDistance(){
+	return distance;
 }
 
 void Cell :: printCell(){
