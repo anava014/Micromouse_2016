@@ -19,6 +19,7 @@ private:
 	int distance;
 
 	bool hasTraversed;
+	bool efficiencyTraversed;
 
 	string cellDrawing;
 
@@ -40,6 +41,16 @@ public:
 	string returnDistance();
 	int returnIntDistance();
 	void setCoordinates(int x, int y);
+
+	void setTraversed();
+	bool returnHasTraversed(){
+		return hasTraversed;
+	}
+
+	void setEffTraversed();
+	bool returnHasEffTraversed(){
+		return efficiencyTraversed;
+	}
 
 	int returnXCoor();
 	int returnYCoor();

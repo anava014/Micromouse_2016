@@ -21,6 +21,17 @@ public:
 	string mouseChar();
 	void delayProgram(double secondsToDelay);
 
+	bool searchRunComplete(){
+		return (xPos == 7 && yPos == 7) ||
+				(xPos == 7 && yPos == 8) ||
+				(xPos == 8 && yPos == 7) ||
+				(xPos == 8 && yPos == 8)  ;
+	}
+
+	bool homeRunComplete(){
+		return (xPos == 0 && yPos == 15);
+	}
+
 	int returnXPos(){
 		return xPos;
 	}

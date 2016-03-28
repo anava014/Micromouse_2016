@@ -117,6 +117,14 @@ void Cell :: setDistance(int d){
 
 }
 
+void Cell :: setTraversed(){
+	hasTraversed = true;
+}
+
+void Cell :: setEffTraversed(){
+	efficiencyTraversed = true;
+}
+
 string Cell :: returnDistance(){
 	if(distance == -1)
 		return "-1";
