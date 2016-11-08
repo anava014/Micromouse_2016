@@ -18,7 +18,7 @@ private:
 	Cell liveMaze[16][16];
 	CellStack floodStack;
 	Cell optimalRoute[100];
-	CellNode *root = NULL;       // This won't change, or we would lose the list in memory
+	CellNode *root;       // This won't change, or we would lose the list in memory
     CellNode *conductor;  // This will point to each node as it traverses the list
 
 	//CellArray paths[100];

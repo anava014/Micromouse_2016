@@ -14,7 +14,6 @@ private:
 public:
 	CellNode node;
 	CellLink *head;
-	//CellLink *tail;
 	CellLink *next;
 
 	CellLink();
@@ -22,7 +21,6 @@ public:
 	CellLink(CellNode _node);
 
 	void pushCell(CellNode _node);
-	void print();
 	void setNext(CellLink *n);
 	void setData(CellNode _node);
 

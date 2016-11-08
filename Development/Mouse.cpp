@@ -20,9 +20,9 @@ string Mouse :: mouseChar(){
 }
 
 void Mouse :: step(){
-// 	char temp;
-// 	cout << "Enter key:";
-// 	cin >> temp;
+	// char temp;
+	// cout << "Enter key:";
+	// cin >> temp;
 
 	delayProgram(.05);
 	if(facing == 0){

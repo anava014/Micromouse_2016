@@ -3,46 +3,46 @@
 //CHECK FOR OUT OF BOUNDS
 
 Maze :: Maze(Mouse *mouse){
+	root = NULL;
 	this->mouse = mouse;
 	optimalRouteIterator = 0;
 	sizeOfPaths = 0;
-	//pathElement = -1;
 
 	//Borders
 	int j = 15;
 	for(int i = 0; i < 16; ++i){
-		maze[i][j].setWall("west"); //[k][15] 
+		maze[i][j].setWall("west"); //[k][15]
 	}
 	int i = 0;
 	for(int j = 0; j < 16; ++j){
-		maze[i][j].setWall("south"); //[0][k] 
+		maze[i][j].setWall("south"); //[0][k]
 	}
 	j = 0;
 	for(int i = 0; i < 16; ++i){
-		maze[i][j].setWall("east");//[k][0] 
+		maze[i][j].setWall("east");//[k][0]
 	}
 	i = 15;
 	for(int j = 0; j < 16; ++j){
-		maze[i][j].setWall("north");//[15][k] 
+		maze[i][j].setWall("north");//[15][k]
 	}
 	//Initial Cell
 	maze[0][15].setWall("east");
 
 	j = 15;
 	for(int i = 0; i < 16; ++i){
-		liveMaze[i][j].setWall("west"); //[k][15] 
+		liveMaze[i][j].setWall("west"); //[k][15]
 	}
 	i = 0;
 	for(int j = 0; j < 16; ++j){
-		liveMaze[i][j].setWall("south"); //[0][k] 
+		liveMaze[i][j].setWall("south"); //[0][k]
 	}
 	j = 0;
 	for(int i = 0; i < 16; ++i){
-		liveMaze[i][j].setWall("east");//[k][0] 
+		liveMaze[i][j].setWall("east");//[k][0]
 	}
 	i = 15;
 	for(int j = 0; j < 16; ++j){
-		liveMaze[i][j].setWall("north");//[15][k] 
+		liveMaze[i][j].setWall("north");//[15][k]
 	}
 	//Initial Cell
 	setLiveEastWestWalls(0,14);
@@ -76,7 +76,6 @@ Maze :: Maze(Mouse *mouse){
 	}
 
 	drawMap();
-
 }
 
 void Maze :: drawMap(){
@@ -88,7 +87,7 @@ void Maze :: importMapFromFile(){
 	int i = 16;
 	int j = 15;
     ifstream file("currentMap.txt");
-    string str, temp; 
+    string str, temp;
     while (getline(file, str))
     {
     	--i;
@@ -132,7 +131,7 @@ void Maze :: printMaze(){
 		for(int j = 15; j >= 0; --j){
 			if(maze[i][j].wallStatus("north"))
 				cout << "+---+";
-			else 
+			else
 				cout << "+   +";
 		}
 		cout << endl;
@@ -162,7 +161,7 @@ void Maze :: printMaze(){
 		for(int j = 15; j >= 0; --j){
 			if(maze[i][j].wallStatus("south"))
 				cout << "+---+";
-			else 
+			else
 				cout << "+   +";
 		}
 		cout << endl;
@@ -177,7 +176,7 @@ void Maze :: printLiveMaze(){
 		for(int j = 15; j >= 0; --j){
 			if(liveMaze[i][j].wallStatus("north"))
 				cout << "+---+";
-			else 
+			else
 				cout << "+   +";
 		}
 		cout << endl;
@@ -207,14 +206,11 @@ void Maze :: printLiveMaze(){
 		for(int j = 15; j >= 0; --j){
 			if(liveMaze[i][j].wallStatus("south"))
 				cout << "+---+";
-			else 
+			else
 				cout << "+   +";
 		}
 		cout << endl;
 	}
-
-	//cout << "Coordinates: " << mouse->returnXPos() << ", " << mouse->returnYPos() << endl;
-	//cout << "Facing: " << mouse->returnFacing() << endl;
 }
 
 
@@ -227,7 +223,7 @@ void Maze :: start(){
 
 		floodFill();
 		analyzePosition();
-		
+
 		mouse->step();
 		if(mouse->searchRunComplete())
 			searchOver = true;
@@ -252,31 +248,13 @@ void Maze :: start(){
 		floodFill();
 		analyzePosition();
 		//analyzePositionAndOptimize();
-		
+
 		mouse->step();
 		if(mouse->homeRunComplete())
 			searchOver = true;
 	}
 
 	optimizeRoute();
-	// cout << "== RUN TERMINATED == " << endl;
-	// cout << "Size of paths: " << sizeOfPaths << endl;
-
-	// CellNode *current;
-	// cout << "== In Traverse == " << endl;
-	// for(current = root; current != NULL; current = current->next) {
-	// 	cout <<	" distance: " << current->data.returnIntDistance() << " -> ";
-	// }
-	// cout << "NULL" << endl;
-
-	// for (int i = 0; i < sizeOfPaths; ++i){
-	// 	cout << "Path " << i << ": " << endl;
-	// 	for(int j = 0; j < paths[i].sizeOf(); ++j){
-	// 		cout << "\t" << paths[i].path[j].returnIntDistance() << endl;
-	// 	}
-	// 	cout << "---------------------------------------------\n" << endl;
-	// }
-
 
 	printLiveMaze();
 	speedRun();
@@ -285,15 +263,6 @@ void Maze :: start(){
 void Maze :: speedRun(){
 	int optimalRouteIterator = optimalRouteSize-1;
 	while(optimalRouteIterator >= 0){
-		// cout << "optimalRouteIterator:" << optimalRouteIterator << endl;
-		// cout << "Cell X: " << optimalRoute[optimalRouteIterator].returnXCoor() << endl;
-		// cout << "Cell Y: " << optimalRoute[optimalRouteIterator].returnYCoor() << endl;
-		// cout << "Mouse X: " << mouse->returnXPos() << endl;
-		// cout << "Mouse Y: " << mouse->returnYPos() << endl;
-		// char temp;
-		// cout << "Enter key:";
-		// cin >> temp;
-
 		if(optimalRoute[optimalRouteIterator].returnXCoor() > mouse->returnXPos()
 			&& optimalRoute[optimalRouteIterator].returnYCoor() == mouse->returnYPos()){
 			mouse->setFacing(0);
@@ -313,11 +282,9 @@ void Maze :: speedRun(){
 		optimalRouteIterator--;
 		cout << string(50, '\n');
 		printLiveMaze();
-		// cout << "Cell X: " << optimalRoute[optimalRouteIterator].returnXCoor() << endl;
-		// cout << "Cell Y: " << optimalRoute[optimalRouteIterator].returnYCoor() << endl;
 		cout << "Mouse X: " << mouse->returnXPos() << endl;
 		cout << "Mouse Y: " << mouse->returnYPos() << endl;
-		
+
 		mouse->step();
 	}
 }
@@ -332,7 +299,7 @@ void Maze :: optimizeRoute(){
 	cout << "X: " << cellCheck.returnXCoor() << "Y: " << cellCheck.returnYCoor()
 			<< "D: " << cellCheck.returnDistance() << endl;
 	while(cellCheck.returnIntDistance() != 0){
-		
+
 		for(int i = 0; i < 4; ++i){
 			if(!cellCheck.wallStatus(i)){
 				if(i == 0){
@@ -372,26 +339,18 @@ void Maze :: optimizeRoute(){
 		if(minPosition == 0){
 			cellCheck = liveMaze[cellCheck.returnXCoor() + 1]
 					[cellCheck.returnYCoor()];
-			// optimalRoute[optimalRouteIterator++] = liveMaze[cellCheck.returnXCoor() + 1]
-			// 		[cellCheck.returnYCoor()];
 		}
 		else if(minPosition == 1){
 			cellCheck = liveMaze[cellCheck.returnXCoor()]
 					[cellCheck.returnYCoor() - 1];
-			// optimalRoute[optimalRouteIterator++] = liveMaze[cellCheck.returnXCoor()]
-			// 		[cellCheck.returnYCoor() - 1];
 		}
 		else if(minPosition == 2){
 			cellCheck = liveMaze[cellCheck.returnXCoor() -1]
 					[cellCheck.returnYCoor()];
-			// optimalRoute[optimalRouteIterator++] = liveMaze[cellCheck.returnXCoor() -1]
-			// 		[cellCheck.returnYCoor()];
 		}
 		else if(minPosition == 3){
 			cellCheck = liveMaze[cellCheck.returnXCoor()]
 					[cellCheck.returnYCoor()+1];
-			// optimalRoute[optimalRouteIterator++] = liveMaze[cellCheck.returnXCoor()]
-			// 		[cellCheck.returnYCoor()+1];
 		}
 
 		optimalRoute[optimalRouteIterator++] = cellCheck;
@@ -400,95 +359,12 @@ void Maze :: optimizeRoute(){
 	optimalRouteSize = optimalRouteIterator-1;
 }
 
-//New Algorithm
-// void Maze :: optimizeRoute(){
-// 	traverse(mouse->returnXPos(), mouse->returnYPos(), 0);
-	// int minPosition = -1;
-	// int maxDistance = 99;
-	// int optimalRouteIterator = 0;
-	// Cell cellCheck = liveMaze[7][7];
-	// optimalRoute[optimalRouteIterator++] = liveMaze[7][7];
-	// printLiveMaze();
-	// cout << "X: " << cellCheck.returnXCoor() << "Y: " << cellCheck.returnYCoor()
-	// 		<< "D: " << cellCheck.returnDistance() << endl;
-
-	// while(cellCheck.returnIntDistance() != 0){
-		
-	// 	for(int i = 0; i < 4; ++i){
-	// 		if(!cellCheck.wallStatus(i)){
-	// 			if(i == 0){
-	// 				int cellDistance = liveMaze[cellCheck.returnXCoor() + 1]
-	// 				[cellCheck.returnYCoor()].returnIntDistance();
-	// 				if(cellDistance < maxDistance){
-	// 					maxDistance = cellDistance;
-	// 					minPosition = i;
-	// 				}
-	// 			}
-	// 			else if(i == 1){
-	// 				int cellDistance = liveMaze[cellCheck.returnXCoor()]
-	// 				[cellCheck.returnYCoor() - 1].returnIntDistance();
-	// 				if(cellDistance < maxDistance){
-	// 					maxDistance = cellDistance;
-	// 					minPosition = i;
-	// 				}
-	// 			}
-	// 			else if(i == 2){
-	// 				int cellDistance = liveMaze[cellCheck.returnXCoor() - 1]
-	// 				[cellCheck.returnYCoor()].returnIntDistance();
-	// 				if(cellDistance < maxDistance){
-	// 					maxDistance = cellDistance;
-	// 					minPosition = i;
-	// 				}
-	// 			}
-	// 			else if(i == 3){
-	// 				int cellDistance = liveMaze[cellCheck.returnXCoor()]
-	// 				[cellCheck.returnYCoor() + 1].returnIntDistance();
-	// 				if(cellDistance < maxDistance){
-	// 					maxDistance = cellDistance;
-	// 					minPosition = i;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// 	if(minPosition == 0){
-	// 		cellCheck = liveMaze[cellCheck.returnXCoor() + 1]
-	// 				[cellCheck.returnYCoor()];
-	// 		// optimalRoute[optimalRouteIterator++] = liveMaze[cellCheck.returnXCoor() + 1]
-	// 		// 		[cellCheck.returnYCoor()];
-	// 	}
-	// 	else if(minPosition == 1){
-	// 		cellCheck = liveMaze[cellCheck.returnXCoor()]
-	// 				[cellCheck.returnYCoor() - 1];
-	// 		// optimalRoute[optimalRouteIterator++] = liveMaze[cellCheck.returnXCoor()]
-	// 		// 		[cellCheck.returnYCoor() - 1];
-	// 	}
-	// 	else if(minPosition == 2){
-	// 		cellCheck = liveMaze[cellCheck.returnXCoor() -1]
-	// 				[cellCheck.returnYCoor()];
-	// 		// optimalRoute[optimalRouteIterator++] = liveMaze[cellCheck.returnXCoor() -1]
-	// 		// 		[cellCheck.returnYCoor()];
-	// 	}
-	// 	else if(minPosition == 3){
-	// 		cellCheck = liveMaze[cellCheck.returnXCoor()]
-	// 				[cellCheck.returnYCoor()+1];
-	// 		// optimalRoute[optimalRouteIterator++] = liveMaze[cellCheck.returnXCoor()]
-	// 		// 		[cellCheck.returnYCoor()+1];
-	// 	}
-	// 	cout << "X: " << cellCheck.returnXCoor() << "Y: " << cellCheck.returnYCoor()
-	// 		<< "D: " << cellCheck.returnDistance() << endl;
-
-	// 	optimalRoute[optimalRouteIterator++] = cellCheck;
-	// }
-
-	// optimalRouteSize = optimalRouteIterator-1;
-// }
-
 int Maze :: traverse(int currPosX, int currPosY, int distance){
 	Cell cellCheck = liveMaze[currPosX][currPosY];
-	
+
 	printLiveMaze();
 	cout << "Coordinates: " << currPosX << ", " << currPosY << endl;
-	
+
 	for(int i = 0; i < 4; ++i){
 		if(!cellCheck.wallStatus(i)){
 			if(i == 0)
@@ -507,7 +383,7 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 		root->next = 0;   //  Otherwise it would not work well
     	root->data = cellCheck;
     	conductor = root;
-    	
+
     }
 	else {
 		conductor->next = new CellNode();  // Creates a node at the end of the list
@@ -519,19 +395,9 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 	char temp;
 	cout << "Enter key:";
 	cin >> temp;
-	
-	int pathElement = -1;
-	//printLiveMaze();
-	//pathLink.pushCell(cellCheck);
-	// cout << "== In Traverse == " << endl;
-	// cout << "Stats: currPosX: " << cellCheck.returnXCoor() << " currPosY: "
-	// 	 << cellCheck.returnYCoor()
-	// 	 <<	" distance: " << cellCheck.returnIntDistance() << endl;
-	//char temp;
-	//cout << "Enter key:";
-	//cin >> temp;
 
-	
+	int pathElement = -1;
+
 	liveMaze[currPosX][currPosY].setEffTraversed();
 	for(int i = 0; i < 4; ++i){
 		if(!cellCheck.wallStatus(i)){
@@ -539,7 +405,7 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 				int futureCellDistance = liveMaze[currPosX + 1]
 				[currPosY].returnIntDistance();
 				int cellDistance = liveMaze[currPosX]
-				[currPosY].returnIntDistance();	
+				[currPosY].returnIntDistance();
 				//If cell ahead is higher and we've traversed it once
 				if((liveMaze[currPosX + 1]
 				[currPosY].returnHasTraversed() &&
@@ -547,12 +413,8 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 				(!liveMaze[currPosX + 1]
 				[currPosY].returnHasEffTraversed() &&
 				futureCellDistance < cellDistance)){
-					//cout << "Completed main conditional" << endl;
 					pathElement = traverse(currPosX + 1, currPosY, distance);
-					
-					// else{
-					
-					//cout << "Path Element: " << pathElement << endl;
+
 				    if(((currPosX + 1 == 7 && currPosY == 7) ||
 						(currPosX + 1 == 7 && currPosY == 8) ||
 						(currPosX + 1 == 8 && currPosY == 7) ||
@@ -562,36 +424,7 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 							cout << "Path Element: " << pathElement << endl;
 							//return pathElement;
 				    }
-				 //    if(pathElement >=0){
-				 //    	//cout << "EVER IN HERE: " << i << endl;
-					//     cellCheck = liveMaze[currPosX + 1][currPosY];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	 //return pathElement;
-					// }
-				 	//    else if(pathElement >= 0 && ((currPosX + 1 == 7 && currPosY == 7) ||
-					// 	(currPosX + 1 == 7 && currPosY == 8) ||
-					// 	(currPosX + 1 == 8 && currPosY == 7) ||
-					// 	(currPosX + 1 == 8 && currPosY == 8))) {
-
-					// 	cellCheck = liveMaze[currPosX + 1][currPosY];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	 cout << "In Second If" << endl;
-					// 	return pathElement;
-					// }
-					// else if(pathElement >= 0){
-					// 	cellCheck = liveMaze[currPosX][currPosY];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	//return pathElement;
-					// }
 				}
-				// else 
-				// 	return -1;
 			}
 			else if(i == 1){
 				int futureCellDistance = liveMaze[currPosX]
@@ -617,37 +450,7 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 							++sizeOfPaths;
 							cout << "Path Element: " << pathElement << endl;
 				    }
-				 //    if(pathElement >=0){
-				 //    	//cout << "EVER IN HERE: " << i << " " << cellCheck.returnIntDistance() << endl;
-					//     cellCheck = liveMaze[currPosX][currPosY - 1];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	//return pathElement;
-					// }
-					//return pathElement;
-
-				 //    else if(pathElement >= 0 && ((currPosX == 7 && currPosY - 1 == 7) ||
-					// 	(currPosX == 7 && currPosY - 1 == 8) ||
-					// 	(currPosX == 8 && currPosY - 1 == 7) ||
-					// 	(currPosX == 8 && currPosY - 1 == 8))) {
-
-					// 	cellCheck = liveMaze[currPosX][currPosY - 1];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	return pathElement;
-					// }
-					// else if(pathElement >= 0){
-					// 	cellCheck = liveMaze[currPosX][currPosY];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	//return pathElement;
-					// }
 				}
-				// else 
-				// 	return -1;
 			}
 			//X - 1, Y
 			else if(i == 2){
@@ -663,9 +466,6 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 				[currPosY].returnHasEffTraversed() &&
 				futureCellDistance < cellDistance)){
 					pathElement = traverse(currPosX - 1, currPosY, distance);
-					// if(pathElement < 0)
-					// 	return -1;
-					// else{
 					if(((currPosX - 1 == 7 && currPosY == 7) ||
 						(currPosX - 1 == 7 && currPosY == 8) ||
 						(currPosX - 1 == 8 && currPosY == 7) ||
@@ -674,36 +474,7 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 							++sizeOfPaths;
 							cout << "Path Element: " << pathElement << endl;
 				    }
-				 //    if(pathElement >=0){
-				 //    	//cout << "EVER IN HERE: " << i << endl;
-					// 	paths[pathElement].upSize();
-					//     cellCheck = liveMaze[currPosX - 1][currPosY];
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	 //return pathElement;
-					// }
-
-				 //    else if(pathElement >= 0 && ((currPosX - 1 == 7 && currPosY == 7) ||
-					// 	(currPosX - 1 == 7 && currPosY == 8) ||
-					// 	(currPosX - 1 == 8 && currPosY == 7) ||
-					// 	(currPosX - 1 == 8 && currPosY == 8))) {
-
-					// 	cellCheck = liveMaze[currPosX - 1][currPosY];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	return pathElement;
-					// }
-					// else if(pathElement >= 0){
-					// 	cellCheck = liveMaze[currPosX][currPosY];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	//return pathElement;
-					// }
 				}
-				// else 
-				// 	return -1;
 			}
 			//X , Y + 1
 			else if(i == 3){
@@ -726,38 +497,9 @@ int Maze :: traverse(int currPosX, int currPosY, int distance){
 							++pathElement;
 							++sizeOfPaths;
 							cout << "Path Element: " << pathElement << endl;
-				    		
+
 				    }
-				 //    if(pathElement >=0){
-				 //    	// cout << "EVER IN HERE: " << i << " " << cellCheck.returnIntDistance() << endl;
-					//     cellCheck = liveMaze[currPosX][currPosY + 1];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	 //return pathElement;
-					// }
-
-				 //    else if(pathElement >= 0 && ((currPosX == 7 && currPosY + 1 == 7) ||
-					// 	(currPosX == 7 && currPosY + 1 == 8) ||
-					// 	(currPosX == 8 && currPosY + 1 == 7) ||
-					// 	(currPosX == 8 && currPosY + 1 == 8))) {
-
-					// 	cellCheck = liveMaze[currPosX][currPosY + 1];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	return pathElement;
-					// }
-					// else if(pathElement >= 0){
-					// 	cellCheck = liveMaze[currPosX][currPosY];
-					// 	paths[pathElement].upSize();
-					// 	paths[pathElement].path[cellCheck.returnIntDistance()]
-					// 	 = cellCheck;
-					// 	//return pathElement;
-					// }
 				}
-				// else 
-				// 	return pathElement;
 			}
 		}
 	}
@@ -781,7 +523,7 @@ void Maze :: pushSelfAndAdjacentCells(int x, int y){
 			floodStack.push(liveMaze[j][i]);
 		}
 	}
-	
+
 }
 
 void Maze :: floodFill(){
@@ -940,14 +682,13 @@ bool Maze :: leftOpportunity(){
 void Maze :: analyzePosition(){
 	int minDistance = 99;
 	int minPosition = -1;
-	int priority = -1;
 	//Grabbing Minimum Distance
 	liveMaze[mouse->returnXPos()][mouse->returnYPos()].setTraversed();
 	printLiveMaze();
 	for(int i = 0; i < 4; ++i){
 		if(!liveMaze[mouse->returnXPos()]
 				[mouse->returnYPos()].wallStatus(i)){
-			
+
 			if(i == 0){
 				int cellDistance = liveMaze[mouse->returnXPos() + 1]
 				[mouse->returnYPos()].returnIntDistance();
@@ -980,10 +721,10 @@ void Maze :: analyzePosition(){
 					minDistance = cellDistance;
 					minPosition = i;
 				}
-				
+
 			}
 
-			
+
 		}
 	}
 
@@ -993,10 +734,8 @@ void Maze :: analyzePosition(){
 		cout << "DEAD" << endl;
 		while(1) {}
 	}
-	if(priority > 0)
-		mouse->setFacing(priority);
-	else
-		mouse->setFacing(minPosition);
+
+	mouse->setFacing(minPosition);
 
 
 }
@@ -1010,7 +749,7 @@ void Maze :: analyzePositionAndOptimize(){
 	for(int i = 0; i < 4; ++i){
 		if(!liveMaze[mouse->returnXPos()]
 				[mouse->returnYPos()].wallStatus(i)){
-			
+
 			if(i == 0){
 				int cellDistance = liveMaze[mouse->returnXPos() + 1]
 				[mouse->returnYPos()].returnIntDistance();
@@ -1042,13 +781,13 @@ void Maze :: analyzePositionAndOptimize(){
 					minDistance = cellDistance;
 					minPosition = i;
 				}
-				
+
 			}
 
-			
+
 		}
 
-		
+
 	}
 
 	if(minPosition == 0){
@@ -1079,11 +818,11 @@ void Maze :: analyzePositionAndOptimize(){
 
 	optimalRoute[optimalRouteIterator++] = cellCheck;
 
-	cout << "X: " << optimalRoute[optimalRouteIterator-1].returnXCoor() << "Y: " << 
+	cout << "X: " << optimalRoute[optimalRouteIterator-1].returnXCoor() << "Y: " <<
 	optimalRoute[optimalRouteIterator-1].returnYCoor()
 	<< "D: " << optimalRoute[optimalRouteIterator-1].returnDistance() << endl;
 	cout << "optimalRouteIterator: " << optimalRouteIterator-1 << endl;
- 
+
 	char temp;
 	cout << "Enter key:";
 	cin >> temp;
@@ -1103,11 +842,3 @@ Currenly, working with min distance and following the mouse back home to store
 path
 Mainly in analyzePositionAndOptimize to track array of optimzedRoute
 */
-
-
-
-
-
-
-
-

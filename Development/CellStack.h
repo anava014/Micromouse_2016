@@ -16,8 +16,6 @@ public:
 	Cell pop();
 	bool isEmpty();
 	Cell peek();
-
-	void printStack();
 };
 
 
